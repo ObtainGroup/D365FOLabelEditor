@@ -1,0 +1,89 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LabelEditor" x:Name="window"
+        x:Class="LabelEditor.MainWindow"
+        mc:Ignorable="d"
+        Title="Obtain Label Editor" Height="450" Width="800"
+        DataContext="MainWindow.labelFileViewModel" 
+       >
+
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding NewLabelIdCommand}" CommandParameter="{Binding ElementName=window, Mode=OneWay}" Key="N" Modifiers="Ctrl"/>
+    </Window.InputBindings>
+    
+    <Grid x:Name="grid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Margin="10,10,10,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+        
+            <Label Content="Filter" VerticalAlignment="Center"/>
+            <TextBox x:Name="FilterBox" Grid.Column="1" VerticalAlignment="Center" KeyUp="FilterBox_KeyUp"/>
+
+        </Grid>
+
+        <DataGrid x:Name="LabelDataGrid" ItemsSource="{Binding LabelRows}" SelectionUnit="FullRow" SelectionMode="Single" AutoGenerateColumns="False" Grid.ColumnSpan="2" Grid.Row="1" InitializingNewItem="LabelDataGrid_InitializingNewItem" AlternatingRowBackground="Azure" SelectionChanged="LabelDataGrid_SelectionChanged">
+
+            
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Translate" Command="{Binding TranslateLabelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget}" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            
+            
+            <DataGrid.RowValidationErrorTemplate>
+                <ControlTemplate>
+                    <Grid Margin="0,-2,0,-2" ToolTip="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}, Path=(Validation.Errors)[0].ErrorContent}">
+                        <Ellipse StrokeThickness="0" Fill="Red" Width="{TemplateBinding FontSize}" Height="{TemplateBinding FontSize}" />
+                        <TextBlock Text="!" FontSize="{TemplateBinding FontSize}" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"  />
+                    </Grid>
+                </ControlTemplate>
+            </DataGrid.RowValidationErrorTemplate>
+
+            <DataGrid.RowValidationRules>
+                <local:LabelRowValidationRule ValidationStep="CommittedValue"/>
+            </DataGrid.RowValidationRules>
+
+            <DataGrid.InputBindings>
+                <KeyBinding Command="{Binding CopyLabelIdCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=SelectedItem}" Key="C" Modifiers="Ctrl"/>
+                <KeyBinding Command="{Binding TranslateLabelCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=SelectedItem}" Key="T" Modifiers="Ctrl"/>
+            </DataGrid.InputBindings>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="labelIdColumn" Header="Label ID" Binding="{Binding LabelId}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid Grid.Row="2" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Column="0" Margin="10,10,10,10" Orientation="Horizontal" HorizontalAlignment="Left" FlowDirection="LeftToRight">
+                <Button x:Name="NewButton" Content="New" Command="{Binding NewLabelIdCommand}" CommandParameter="{Binding ElementName=window, Mode=OneWay}" />
+                <Button x:Name="CopyButton" Content="Copy" Margin="10,0" Command="{Binding CopyLabelIdCommand}" CommandParameter="{Binding SelectedItem, ElementName=LabelDataGrid}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="10,10,10,10" FlowDirection="RightToLeft" HorizontalAlignment="Right">
+                <Button x:Name="SaveButton" Content="Save" Click="SaveButtonClick" />
+                <Button x:Name="LoadBotton" Content="Load" Click="LoadButtonClick" Margin="10,0,10,0"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
