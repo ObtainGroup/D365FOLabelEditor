@@ -12,6 +12,37 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SampleFiles", "SampleFiles", "{C2C5022C-C785-4060-810A-E40ECA373937}"
+	ProjectSection(SolutionItems) = preProject
+		SampleFiles\MatasABHLabelFile_da-DK.xml = SampleFiles\MatasABHLabelFile_da-DK.xml
+		SampleFiles\MatasABHLabelFile_da.xml = SampleFiles\MatasABHLabelFile_da.xml
+		SampleFiles\MatasABHLabelFile_en-US.xml = SampleFiles\MatasABHLabelFile_en-US.xml
+		SampleFiles\MatasBSIVLabelfile_da.xml = SampleFiles\MatasBSIVLabelfile_da.xml
+		SampleFiles\MatasBSIVLabelfile_en-US.xml = SampleFiles\MatasBSIVLabelfile_en-US.xml
+		SampleFiles\MatasFLM_da.xml = SampleFiles\MatasFLM_da.xml
+		SampleFiles\MatasFLM_en-US.xml = SampleFiles\MatasFLM_en-US.xml
+		SampleFiles\MatasFVP_da.xml = SampleFiles\MatasFVP_da.xml
+		SampleFiles\MatasFVP_en-US.xml = SampleFiles\MatasFVP_en-US.xml
+		SampleFiles\MatasJdyLabelFile_da-DK.xml = SampleFiles\MatasJdyLabelFile_da-DK.xml
+		SampleFiles\MatasJdyLabelFile_da.xml = SampleFiles\MatasJdyLabelFile_da.xml
+		SampleFiles\MatasJdyLabelFile_en-US.xml = SampleFiles\MatasJdyLabelFile_en-US.xml
+		SampleFiles\MatasNcpLabelFile_da.xml = SampleFiles\MatasNcpLabelFile_da.xml
+		SampleFiles\MatasNcpLabelFile_en-US.xml = SampleFiles\MatasNcpLabelFile_en-US.xml
+		SampleFiles\MatasNKALabelFile_da.xml = SampleFiles\MatasNKALabelFile_da.xml
+		SampleFiles\MatasNKALabelFile_en-US.xml = SampleFiles\MatasNKALabelFile_en-US.xml
+		SampleFiles\MatasPoe_da.xml = SampleFiles\MatasPoe_da.xml
+		SampleFiles\MatasPoe_en-US.xml = SampleFiles\MatasPoe_en-US.xml
+		SampleFiles\MatasTSALabelFile_da.xml = SampleFiles\MatasTSALabelFile_da.xml
+		SampleFiles\MatasTSALabelFile_en-US.xml = SampleFiles\MatasTSALabelFile_en-US.xml
+		SampleFiles\SCA_da.xml = SampleFiles\SCA_da.xml
+		SampleFiles\SCA_de.xml = SampleFiles\SCA_de.xml
+		SampleFiles\SCA_en-US.xml = SampleFiles\SCA_en-US.xml
+		SampleFiles\SCA_fi.xml = SampleFiles\SCA_fi.xml
+		SampleFiles\SCA_nl.xml = SampleFiles\SCA_nl.xml
+		SampleFiles\SCA_no.xml = SampleFiles\SCA_no.xml
+		SampleFiles\SCA_sv.xml = SampleFiles\SCA_sv.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

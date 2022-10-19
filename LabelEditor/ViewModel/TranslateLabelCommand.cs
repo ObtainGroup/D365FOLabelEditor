@@ -133,39 +133,50 @@ namespace LabelEditor.ViewModel
                     }
                 }
                 
-                if (translator.TextToTranslate != string.Empty)
-                { 
+                if (translator.TextToTranslate != string.Empty && translator.To.Count > 0)
+                {
 
-                    var translations = translator.Translate().Result;
-                    LabelRow labelRow = (LabelRow)selectedCells[0].Item;
-
-                    foreach (var cellInfo in selectedCells)
+                    try
                     {
-                        if (cellInfo.Column.SortMemberPath != "LabelId")
+                        var translations = translator.Translate().Result;
+                        LabelRow labelRow = (LabelRow)selectedCells[0].Item;
+
+                        foreach (var cellInfo in selectedCells)
                         {
-                            string colId = cellInfo.Column.Header.ToString();
-                            string cid;
-                            // Language ID mapping as the D365FO ids do not always match the ones returned by the Azure Translator
-                            switch (colId.ToLower())
+                            if (cellInfo.Column.SortMemberPath != "LabelId")
                             {
-                                case "no":
-                                    cid = "nb";
-                                    break;
-                                case "en-us":
-                                    cid = "en";
-                                    break;
-                                default:
-                                    cid = colId.ToLower();
-                                    break;
-                            }
+                                string colId = cellInfo.Column.Header.ToString();
+                                string cid;
+                                // Language ID mapping as the D365FO ids do not always match the ones returned by the Azure Translator
+                                switch (colId.ToLower())
+                                {
+                                    case "no":
+                                        cid = "nb";
+                                        break;
+                                    case "en-us":
+                                        cid = "en";
+                                        break;
+                                    default:
+                                        cid = colId.ToLower();
+                                        break;
+                                }
 
-                            if (translations.ContainsKey(cid))
-                            {
-                                var setCell = this.TryToFindGridCell(grid, cellInfo);
-                                ((TextBlock)setCell.Content).Text = translations[cid];
-                                ((LabelRow)setCell.DataContext).LanguageLabel[colId].Text = translations[cid];
-                            }
+                                if (translations.ContainsKey(cid))
+                                {
+                                    var setCell = this.TryToFindGridCell(grid, cellInfo);
+                                    ((TextBlock)setCell.Content).Text = translations[cid];
+                                    ((LabelRow)setCell.DataContext).LanguageLabel[colId].Text = translations[cid];
+                                }
 
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        if (MessageBox.Show("An error occurred when trying to translate text\nDid you add the translation keys to the config file?\n" +
+                            "Click OK to see documentation", "Error tranlating", MessageBoxButton.OKCancel, MessageBoxImage.Error) == MessageBoxResult.OK)
+                        {
+                            System.Diagnostics.Process.Start("https://github.com/ObtainGroup/D365FOLabelEditor/discussions/3");
                         }
                     }
                 }
