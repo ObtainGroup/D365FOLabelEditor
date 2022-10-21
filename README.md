@@ -12,7 +12,7 @@ When you load a file, it will ask for the xml label wrapper file. It doesn't rea
 The label editor does not sort the labels. Sorting the columns in the editor is visual only. It will append new labels and change existing in whereever they are in the file(s).
 
 ### App.setting
-It will contain a couple of keys used to connect to Azure translator, i.e. a translater key, endpoint (which I think is rather static), and the region in which you have created the translator
+It will contain a couple of keys used to connect to Azure translator, i.e. a translater key, endpoint (which I think is rather static), and the region in which you have created the translator. See discussion https://github.com/ObtainGroup/D365FOLabelEditor/discussions/3 for more into.
 
 For translation, right click the cell that contain the text you want to have translated. It will populate the other blank language cells with the translated text. So, if there is already a text in the cell, it will leave it alone.
 
