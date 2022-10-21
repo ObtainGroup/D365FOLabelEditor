@@ -9,6 +9,8 @@ The application needs to run as an administrator in order to be allowed to chang
 
 When you load a file, it will ask for the xml label wrapper file. It doesn't really do anything with them except decipher what languages are in scope. It will then load the associated text files for the different languages.
 
+Right-Click a focused cell (not the text itself) to show the Translate menu item in the context menu.
+
 The label editor does not sort the labels. Sorting the columns in the editor is visual only. It will append new labels and change existing in whereever they are in the file(s).
 
 ### App.setting
