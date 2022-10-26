@@ -125,10 +125,20 @@ namespace LabelEditor.ViewModel
                         }
                         else if (cellInfo.Column.SortMemberPath != "LabelId")
                         {
-                            if (((TextBlock)cell.Content).Text.Trim().Length == 0)
-                            { 
-                                translator.To.Add(cellInfo.Column.Header.ToString());
-                            }                                
+                            if (cell.Content is TextBlock)
+                            {
+                                if (((TextBlock)cell.Content).Text.Trim().Length == 0)
+                                {
+                                    translator.To.Add(cellInfo.Column.Header.ToString());
+                                }
+                            }
+                            else if (cell.Content is TextBox)
+                            {
+                                if (((TextBox)cell.Content).Text.Trim().Length == 0)
+                                {
+                                    translator.To.Add(cellInfo.Column.Header.ToString());
+                                }
+                            }
                         }
                     }
                 }
