@@ -145,7 +145,6 @@ namespace LabelEditor.ViewModel
                 
                 if (translator.TextToTranslate != string.Empty && translator.To.Count > 0)
                 {
-
                     try
                     {
                         var translations = translator.Translate().Result;
@@ -177,14 +176,13 @@ namespace LabelEditor.ViewModel
                                     ((TextBlock)setCell.Content).Text = translations[cid];
                                     ((LabelRow)setCell.DataContext).LanguageLabel[colId].Text = translations[cid];
                                 }
-
                             }
                         }
                     }
-                    catch
+                    catch (Exception e)
                     {
-                        if (MessageBox.Show("An error occurred when trying to translate text\nDid you add the translation keys to the config file?\n" +
-                            "Click OK to see documentation", "Error tranlating", MessageBoxButton.OKCancel, MessageBoxImage.Error) == MessageBoxResult.OK)
+                        if (MessageBox.Show($"An error occurred when trying to translate text\nDid you add the translation keys to the config file?\n\nMessage:\n{(e.InnerException != null ? e.InnerException.Message : e.Message)}" +
+                            "\n\nClick OK to see documentation", "Error tranlating", MessageBoxButton.OKCancel, MessageBoxImage.Error) == MessageBoxResult.OK)
                         {
                             System.Diagnostics.Process.Start("https://github.com/ObtainGroup/D365FOLabelEditor/discussions/3");
                         }

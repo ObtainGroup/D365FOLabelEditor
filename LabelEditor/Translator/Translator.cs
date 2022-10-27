@@ -61,6 +61,11 @@ namespace LabelEditor.Translator
 
                 // Send the request and get response.
                 HttpResponseMessage response = await client.SendAsync(request).ConfigureAwait(false);
+
+                if (response.IsSuccessStatusCode != true)
+                {
+                    throw new Exception($"{response.StatusCode} {response.ReasonPhrase}");
+                }
                 // Read response as a string.
                 string webResult = await response.Content.ReadAsStringAsync();
                 JArray translatorResult = (JArray)JsonConvert.DeserializeObject(webResult);

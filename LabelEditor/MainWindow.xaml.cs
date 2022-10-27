@@ -127,16 +127,9 @@ namespace LabelEditor
                         }
                     }
                     LabelDataGrid.Columns.Add(dataGridTextColumn);
-                    //LabelDataGrid.ContextMenu = new ContextMenu { it}
                 }
             }
         }
-
-        //protected ContextMenu BuildContextMenu()
-        //{
-        //    ContextMenu menu = new ContextMenu();
-        //    menu.Items.Add  
-        //}
 
         private void SaveButtonClick(object sender, RoutedEventArgs e)
         {
