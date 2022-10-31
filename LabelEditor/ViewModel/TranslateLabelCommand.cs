@@ -1,6 +1,7 @@
 ﻿using LabelLibrary;
 
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -103,88 +104,76 @@ namespace LabelEditor.ViewModel
 
         public void Execute(object parameter)
         {
-            // https://stackoverflow.com/questions/22606700/find-the-focused-cell-from-a-datagrid
-            DataGrid grid = parameter as DataGrid;
-
-            if (grid != null)
+            if (parameter is DataGrid grid)
             {
+                var item = (LabelLibrary.LabelRow)grid.CurrentCell.Item;
+                var column = grid.CurrentCell.Column;
 
-                Translator.Translator translator = new Translator.Translator();
-                var selectedCells = grid.SelectedCells;
+                var labels = item.LanguageLabel;
+                string currentLanguage = column.Header.ToString();
 
-                // Collect columns to translate
-                foreach (var cellInfo in selectedCells)
+                if (labels.TryGetValue(currentLanguage, out LabelLibrary.Label currentLabel))
                 {
-                    if (cellInfo.Column.SortMemberPath != "LabelId")
-                    { 
-                        var cell = this.TryToFindGridCell(grid, cellInfo);
-                        if (cell.IsFocused)
+                    Translator.Translator translator = new Translator.Translator
+                    {
+                        TextToTranslate = currentLabel.Text,
+                        From = currentLanguage
+                    };
+
+                    List<string> languages = new List<string>(labels.Keys);
+                    foreach (var language in languages)
+                    {
+                        if (language != currentLanguage)
                         {
-                            translator.TextToTranslate = ((TextBlock)cell.Content).Text;
-                            translator.From = cellInfo.Column.Header.ToString();
-                        }
-                        else if (cellInfo.Column.SortMemberPath != "LabelId")
-                        {
-                            if (cell.Content is TextBlock)
-                            {
-                                if (((TextBlock)cell.Content).Text.Trim().Length == 0)
-                                {
-                                    translator.To.Add(cellInfo.Column.Header.ToString());
-                                }
-                            }
-                            else if (cell.Content is TextBox)
-                            {
-                                if (((TextBox)cell.Content).Text.Trim().Length == 0)
-                                {
-                                    translator.To.Add(cellInfo.Column.Header.ToString());
-                                }
-                            }
+                            translator.To.Add(language);
                         }
                     }
-                }
-                
-                if (translator.TextToTranslate != string.Empty && translator.To.Count > 0)
-                {
-                    try
+
+                    if (translator.TextToTranslate != string.Empty && translator.To.Count > 0)
                     {
-                        var translations = translator.Translate().Result;
-                        LabelRow labelRow = (LabelRow)selectedCells[0].Item;
 
-                        foreach (var cellInfo in selectedCells)
+                        try
                         {
-                            if (cellInfo.Column.SortMemberPath != "LabelId")
-                            {
-                                string colId = cellInfo.Column.Header.ToString();
-                                string cid;
-                                // Language ID mapping as the D365FO ids do not always match the ones returned by the Azure Translator
-                                switch (colId.ToLower())
-                                {
-                                    case "no":
-                                        cid = "nb";
-                                        break;
-                                    case "en-us":
-                                        cid = "en";
-                                        break;
-                                    default:
-                                        cid = colId.ToLower();
-                                        break;
-                                }
+                            var selectedCells = grid.SelectedCells;
+                            var translations = translator.Translate().Result;
 
-                                if (translations.ContainsKey(cid))
+                            foreach (var cellInfo in selectedCells)
+                            {
+                                if (cellInfo.Column.SortMemberPath != "LabelId")
                                 {
-                                    var setCell = this.TryToFindGridCell(grid, cellInfo);
-                                    ((TextBlock)setCell.Content).Text = translations[cid];
-                                    ((LabelRow)setCell.DataContext).LanguageLabel[colId].Text = translations[cid];
+                                    string colId = cellInfo.Column.Header.ToString();
+                                    string cid;
+                                    // Language ID mapping as the D365FO ids do not always match the ones returned by the Azure Translator
+                                    switch (colId.ToLower())
+                                    {
+                                        case "no":
+                                            cid = "nb";
+                                            break;
+                                        case "en-us":
+                                            cid = "en";
+                                            break;
+                                        default:
+                                            cid = colId.ToLower();
+                                            break;
+                                    }
+
+                                    if (translations.ContainsKey(cid))
+                                    {
+                                        var setCell = this.TryToFindGridCell(grid, cellInfo);
+                                        ((TextBlock)setCell.Content).Text = translations[cid];
+                                        ((LabelRow)setCell.DataContext).LanguageLabel[colId].Text = translations[cid];
+                                    }
+
                                 }
                             }
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        if (MessageBox.Show($"An error occurred when trying to translate text\nDid you add the translation keys to the config file?\n\nMessage:\n{(e.InnerException != null ? e.InnerException.Message : e.Message)}" +
-                            "\n\nClick OK to see documentation", "Error tranlating", MessageBoxButton.OKCancel, MessageBoxImage.Error) == MessageBoxResult.OK)
+                        catch
                         {
-                            System.Diagnostics.Process.Start("https://github.com/ObtainGroup/D365FOLabelEditor/discussions/3");
+                            if (MessageBox.Show("An error occurred when trying to translate text\nDid you add the translation keys to the config file?\n" +
+                                "Click OK to see documentation", "Error tranlating", MessageBoxButton.OKCancel, MessageBoxImage.Error) == MessageBoxResult.OK)
+                            {
+                                System.Diagnostics.Process.Start("https://github.com/ObtainGroup/D365FOLabelEditor/discussions/3");
+                            }
                         }
                     }
                 }
